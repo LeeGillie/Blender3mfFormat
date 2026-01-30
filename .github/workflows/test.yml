@@ -23,7 +23,7 @@ jobs:
         with:
           python-version: '3.10'
       - name: Install dependencies
-        run: python3 -m pip install mathutils pycodestyle
+        run: python3 -m pip install pycodestyle
       - name: Test
         run: python3 -m unittest test
       - name: Code style

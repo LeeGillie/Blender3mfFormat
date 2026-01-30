@@ -47,6 +47,12 @@ class TestExport3MF(unittest.TestCase):
         self.exporter = io_mesh_3mf.export_3mf.Export3MF()  # An exporter class.
         self.exporter.use_mesh_modifiers = False
         self.exporter.coordinate_precision = 4
+        
+        # Initialize instance variables that would normally be set in execute()
+        self.exporter.next_resource_id = 1
+        self.exporter.num_written = 0
+        self.exporter.material_resource_id = -1
+        self.exporter.material_name_to_index = {}
 
         self.mock_triangle_loop = unittest.mock.MagicMock()
         self.mock_triangle_loop.material_index = 0

@@ -18,7 +18,11 @@ that they get run then.
 import sys  # To mock entire packages.
 import unittest.mock  # To mock away the Blender API.
 
+# Import our custom mocks
+from .mock import mathutils
+
 # Mock all of the Blender API packages.
+sys.modules["mathutils"] = mathutils
 sys.modules["bpy"] = unittest.mock.MagicMock()
 sys.modules["bpy.ops"] = unittest.mock.MagicMock()
 sys.modules["bpy.props"] = unittest.mock.MagicMock()

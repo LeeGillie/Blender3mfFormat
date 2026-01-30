@@ -56,13 +56,19 @@ class TestImport3MF(unittest.TestCase):
         Creates fixtures to help running these tests.
         """
         self.importer = io_mesh_3mf.import_3mf.Import3MF()  # An importer class.
+        
+        # Initialize instance variables that would normally be set in execute()
+        self.importer.resource_objects = {}
+        self.importer.resource_materials = {}
+        self.importer.num_loaded = 0
 
         self.single_triangle = io_mesh_3mf.import_3mf.ResourceObject(  # A model with just a single triangle.
             vertices=[(0.0, 0.0, 0.0), (5.0, 0.0, 1.0), (0.0, 5.0, 1.0)],
             triangles=[(0, 1, 2)],
             materials=[None],
             components=[],
-            metadata=Metadata()
+            metadata=Metadata(),
+            trianglesets=[]
         )
         # A dummy stream to write to, in order to construct archives to import from in-memory.
         self.black_hole = io.BytesIO()
@@ -1640,7 +1646,8 @@ class TestImport3MF(unittest.TestCase):
                 resource_object="1",
                 transformation=mathutils.Matrix.Identity(4)
             )],
-            metadata=Metadata()
+            metadata=Metadata(),
+            trianglesets=[]
         )
         self.importer.resource_objects["1"] = self.single_triangle
         self.importer.resource_objects["2"] = with_component
@@ -1680,7 +1687,8 @@ class TestImport3MF(unittest.TestCase):
                 resource_object="1",
                 transformation=mathutils.Matrix.Identity(4)
             )],
-            metadata=Metadata()
+            metadata=Metadata(),
+            trianglesets=[]
         )
         self.importer.resource_objects["1"] = resource_object
 
@@ -1704,7 +1712,8 @@ class TestImport3MF(unittest.TestCase):
                 resource_object="2",  # This object ID doesn't exist!
                 transformation=mathutils.Matrix.Identity(4)
             )],
-            metadata=Metadata()
+            metadata=Metadata(),
+            trianglesets=[]
         )
         self.importer.resource_objects["1"] = resource_object
 
@@ -1731,7 +1740,8 @@ class TestImport3MF(unittest.TestCase):
                 resource_object="1",
                 transformation=mathutils.Matrix.Scale(2.0, 4)
             )],
-            metadata=Metadata()
+            metadata=Metadata(),
+            trianglesets=[]
         )
         self.importer.resource_objects["1"] = self.single_triangle
         self.importer.resource_objects["2"] = with_transformed_component
