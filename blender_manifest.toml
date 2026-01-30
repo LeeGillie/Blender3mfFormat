@@ -1,0 +1,50 @@
+# Blender Extension Manifest
+# https://docs.blender.org/manual/en/latest/advanced/extensions/getting_started.html
+
+schema_version = "1.0.0"
+
+id = "io_mesh_3mf"
+version = "2.2.0"
+name = "3MF Format"
+tagline = "Import and export 3D Manufacturing Format files"
+maintainer = "Lee Gillie, CCP"
+type = "add-on"
+
+# Optional: add documentation or source code URL
+website = "https://github.com/LeeGillie/Blender3mfFormat"
+
+# Blender version support
+blender_version_min = "4.2.0"
+
+# License - using SPDX identifier
+license = [
+  "SPDX:GPL-2.0-or-later",
+]
+
+# Copyright information
+copyright = [
+  "2020-2024 Ghostkeeper (original author)",
+  "2026 Lee Gillie, CCP (Blender 5 fork)",
+]
+
+# Tags for categorization
+tags = ["Import-Export", "Mesh"]
+
+# Permissions - this addon reads and writes files
+[permissions]
+files = "Import and export 3MF mesh files"
+
+# Build configuration
+[build]
+paths_exclude_pattern = [
+  "__pycache__/",
+  ".*",
+  "*.zip",
+  "*.blend",
+  "*.blend1",
+  "test/",
+  ".github/",
+  "CHANGES.md",
+  "CONTRIBUTING.md",
+  "screenshot.png",
+]

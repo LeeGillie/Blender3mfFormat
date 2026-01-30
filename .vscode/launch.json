@@ -1,0 +1,25 @@
+{
+    // Launch Blender with this extension for debugging
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Blender: Launch with Extension",
+            "type": "python",
+            "request": "launch",
+            "program": "C:\\Program Files\\Blender Foundation\\Blender 5.0\\blender.exe",
+            "console": "integratedTerminal",
+            "justMyCode": false,
+            "env": {
+                "PYTHONPATH": "${workspaceFolder}"
+            }
+        },
+        {
+            "name": "Python: Build Script",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}/build.py",
+            "console": "integratedTerminal",
+            "cwd": "${workspaceFolder}"
+        }
+    ]
+}

@@ -1,0 +1,25 @@
+{
+    "python.analysis.extraPaths": [
+        "C:\\Program Files\\Blender Foundation\\Blender 5.0\\5.0\\scripts\\modules"
+    ],
+    "python.autoComplete.extraPaths": [
+        "C:\\Program Files\\Blender Foundation\\Blender 5.0\\5.0\\scripts\\modules"
+    ],
+    "files.associations": {
+        "*.toml": "toml"
+    },
+    "files.exclude": {
+        "**/__pycache__": true,
+        "**/*.pyc": true,
+        "*.zip": false
+    },
+    "editor.rulers": [120],
+    "python.linting.enabled": true,
+    "python.linting.pylintEnabled": false,
+    "python.linting.flake8Enabled": true,
+    "[python]": {
+        "editor.tabSize": 4,
+        "editor.insertSpaces": true,
+        "editor.formatOnSave": false
+    }
+}

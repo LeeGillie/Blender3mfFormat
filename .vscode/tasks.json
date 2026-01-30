@@ -1,0 +1,73 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Build Extension",
+            "type": "shell",
+            "command": "blender",
+            "args": [
+                "--command",
+                "extension",
+                "build"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "presentation": {
+                "reveal": "always",
+                "panel": "new"
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "Validate Extension",
+            "type": "shell",
+            "command": "blender",
+            "args": [
+                "--command",
+                "extension",
+                "validate"
+            ],
+            "group": "build",
+            "presentation": {
+                "reveal": "always",
+                "panel": "new"
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "Build Extension (with output name)",
+            "type": "shell",
+            "command": "blender",
+            "args": [
+                "--command",
+                "extension",
+                "build",
+                "--output-filepath",
+                "io_mesh_3mf-1.0.2.zip"
+            ],
+            "group": "build",
+            "presentation": {
+                "reveal": "always",
+                "panel": "new"
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "Clean Build Artifacts",
+            "type": "shell",
+            "command": "powershell",
+            "args": [
+                "-Command",
+                "Remove-Item -Path '*.zip' -Force -ErrorAction SilentlyContinue; Write-Host 'Build artifacts cleaned'"
+            ],
+            "group": "build",
+            "presentation": {
+                "reveal": "always",
+                "panel": "new"
+            },
+            "problemMatcher": []
+        }
+    ]
+}
