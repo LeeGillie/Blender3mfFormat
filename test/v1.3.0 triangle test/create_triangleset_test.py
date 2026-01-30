@@ -12,28 +12,31 @@ output_path = os.path.join(os.path.dirname(__file__), output_file)
 
 # Create the 3MF archive
 with zipfile.ZipFile(output_path, 'w', zipfile.ZIP_DEFLATED) as zipf:
-    
+
     # 1. [Content_Types].xml
     content_types = '''<?xml version="1.0" encoding="UTF-8"?>
 <Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types">
     <Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/>
-    <Default Extension="model" ContentType="application/vnd.ms-package.3dmanufacturing-3dmodel+xml"/>
+    <Default Extension="model"
+        ContentType="application/vnd.ms-package.3dmanufacturing-3dmodel+xml"/>
 </Types>'''
     zipf.writestr('[Content_Types].xml', content_types)
-    
+
     # 2. _rels/.rels
     rels = '''<?xml version="1.0" encoding="UTF-8"?>
 <Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">
-    <Relationship Target="/3D/3dmodel.model" Type="http://schemas.microsoft.com/3dmanufacturing/2013/01/3dmodel" Id="rel-1"/>
+    <Relationship Target="/3D/3dmodel.model"
+        Type="http://schemas.microsoft.com/3dmanufacturing/2013/01/3dmodel" Id="rel-1"/>
 </Relationships>'''
     zipf.writestr('_rels/.rels', rels)
-    
+
     # 3. 3D/3dmodel.model with triangle sets (v1.3.0 feature)
     model = '''<?xml version="1.0" encoding="UTF-8"?>
-<model unit="millimeter" xml:lang="en-US" xmlns="http://schemas.microsoft.com/3dmanufacturing/core/2015/02">
+<model unit="millimeter" xml:lang="en-US"
+    xmlns="http://schemas.microsoft.com/3dmanufacturing/core/2015/02">
     <metadata name="Application">Blender 3MF Test File Generator</metadata>
     <metadata name="Title">Cube with Triangle Sets (v1.3.0)</metadata>
-    
+
     <resources>
         <!-- Define a simple cube mesh -->
         <object id="1" name="Cube_with_TriangleSets" type="model">
@@ -53,28 +56,28 @@ with zipfile.ZipFile(output_path, 'w', zipfile.ZIP_DEFLATED) as zipf:
                     <!-- Bottom face (z=0) -->
                     <triangle v1="0" v2="2" v3="1"/>
                     <triangle v1="0" v2="3" v3="2"/>
-                    
+
                     <!-- Top face (z=10) -->
                     <triangle v1="4" v2="5" v3="6"/>
                     <triangle v1="4" v2="6" v3="7"/>
-                    
+
                     <!-- Front face (y=0) -->
                     <triangle v1="0" v2="1" v3="5"/>
                     <triangle v1="0" v2="5" v3="4"/>
-                    
+
                     <!-- Back face (y=10) -->
                     <triangle v1="2" v2="3" v3="7"/>
                     <triangle v1="2" v2="7" v3="6"/>
-                    
+
                     <!-- Left face (x=0) -->
                     <triangle v1="0" v2="4" v3="7"/>
                     <triangle v1="0" v2="7" v3="3"/>
-                    
+
                     <!-- Right face (x=10) -->
                     <triangle v1="1" v2="2" v3="6"/>
                     <triangle v1="1" v2="6" v3="5"/>
                 </triangles>
-                
+
                 <!-- Triangle Sets - v1.3.0 Feature -->
                 <!-- Group triangles by face for different materials/properties -->
                 <trianglesets>
@@ -82,12 +85,12 @@ with zipfile.ZipFile(output_path, 'w', zipfile.ZIP_DEFLATED) as zipf:
                     <triangleset name="HorizontalFaces">
                         <ref>0 1 2 3</ref>
                     </triangleset>
-                    
+
                     <!-- Front and Back faces -->
                     <triangleset name="FrontBackFaces">
                         <ref>4 5 6 7</ref>
                     </triangleset>
-                    
+
                     <!-- Left and Right faces -->
                     <triangleset name="SideFaces">
                         <ref>8 9 10 11</ref>
@@ -96,7 +99,7 @@ with zipfile.ZipFile(output_path, 'w', zipfile.ZIP_DEFLATED) as zipf:
             </mesh>
         </object>
     </resources>
-    
+
     <build>
         <item objectid="1"/>
     </build>

@@ -41,7 +41,7 @@ def should_exclude(path: Path, base_path: Path) -> bool:
     """Check if a path should be excluded based on exclude patterns."""
     rel_path = path.relative_to(base_path)
     path_str = str(rel_path).replace('\\', '/')
-    
+
     for pattern in EXCLUDE_PATTERNS:
         if pattern.startswith('*'):
             # File extension pattern
@@ -55,7 +55,7 @@ def should_exclude(path: Path, base_path: Path) -> bool:
             # Exact match
             if pattern in rel_path.parts or path.name == pattern:
                 return True
-    
+
     return False
 
 
@@ -63,40 +63,40 @@ def build_extension():
     """Build the extension ZIP file."""
     base_path = Path(__file__).parent
     output_path = base_path / OUTPUT_FILE
-    
+
     # Remove existing build
     if output_path.exists():
         print(f"Removing existing build: {output_path}")
         output_path.unlink()
-    
+
     print(f"Building extension: {OUTPUT_FILE}")
     print(f"Base path: {base_path}")
-    
+
     # Create ZIP file
     with zipfile.ZipFile(output_path, 'w', zipfile.ZIP_DEFLATED) as zipf:
         # Add files
         for root, dirs, files in os.walk(base_path):
             root_path = Path(root)
-            
+
             # Filter directories
             dirs[:] = [d for d in dirs if not should_exclude(root_path / d, base_path)]
-            
+
             for file in files:
                 file_path = root_path / file
-                
+
                 # Skip excluded files
                 if should_exclude(file_path, base_path):
                     continue
-                
+
                 # Calculate archive name
                 arcname = file_path.relative_to(base_path)
-                
+
                 print(f"  Adding: {arcname}")
                 zipf.write(file_path, arcname)
-    
+
     print(f"\n✓ Extension built successfully: {output_path}")
     print(f"  File size: {output_path.stat().st_size / 1024:.2f} KB")
-    
+
     return output_path
 
 

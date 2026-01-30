@@ -66,7 +66,7 @@ def unregister():
     """Unregister all classes and menu items."""
     bpy.types.TOPBAR_MT_file_import.remove(menu_import)
     bpy.types.TOPBAR_MT_file_export.remove(menu_export)
-    
+
     for cls in reversed(classes):
         bpy.utils.unregister_class(cls)
 

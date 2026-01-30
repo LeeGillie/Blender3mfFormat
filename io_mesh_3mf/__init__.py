@@ -30,4 +30,3 @@ from .import_3mf import Import3MF
 from .export_3mf import Export3MF
 
 __all__ = ['Import3MF', 'Export3MF']
-

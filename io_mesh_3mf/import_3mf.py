@@ -576,7 +576,7 @@ class Import3MF(bpy.types.Operator, bpy_extras.io_utils.ImportHelper):
         for triangleset in object_node.iterfind("./3mf:mesh/3mf:trianglesets/3mf:triangleset", MODEL_NAMESPACES):
             name = triangleset.attrib.get("name", "")
             pid = triangleset.attrib.get("pid")  # Property/material ID for this set
-            
+
             # Parse the triangle indices from <ref> element
             triangle_indices = []
             for ref in triangleset.iterfind("./3mf:ref", MODEL_NAMESPACES):
@@ -590,14 +590,16 @@ class Import3MF(bpy.types.Operator, bpy_extras.io_utils.ImportHelper):
                             if index >= 0:
                                 triangle_indices.append(index)
                             else:
-                                log.warning(f"Triangle set '{name}' contains negative triangle index: {index}")
+                                log.warning(
+                                    f"Triangle set '{name}' contains negative triangle index: {index}")
                         except ValueError:
-                            log.warning(f"Triangle set '{name}' contains invalid triangle index: {index_str}")
-            
+                            log.warning(
+                                f"Triangle set '{name}' contains invalid triangle index: {index_str}")
+
             if triangle_indices:
                 result.append(TriangleSet(name=name, triangle_indices=triangle_indices, pid=pid))
                 log.info(f"Loaded triangle set '{name}' with {len(triangle_indices)} triangles")
-        
+
         return result
 
     def read_components(self, object_node):
@@ -751,8 +753,11 @@ class Import3MF(bpy.types.Operator, bpy_extras.io_utils.ImportHelper):
             if resource_object.trianglesets:
                 for triangleset in resource_object.trianglesets:
                     # Create a unique material for this triangle set
-                    material_name = f"TriangleSet_{triangleset.name}" if triangleset.name else f"TriangleSet_{len(materials_to_index)}"
-                    
+                    if triangleset.name:
+                        material_name = f"TriangleSet_{triangleset.name}"
+                    else:
+                        material_name = f"TriangleSet_{len(materials_to_index)}"
+
                     # Check if this triangle set has a material ID
                     set_material = None
                     if triangleset.pid:
@@ -762,8 +767,10 @@ class Import3MF(bpy.types.Operator, bpy_extras.io_utils.ImportHelper):
                                 # For now, use the first material from the set
                                 set_material = self.resource_materials[triangleset.pid].get(0)
                         except (KeyError, AttributeError):
-                            log.warning(f"Triangle set '{triangleset.name}' references unknown material {triangleset.pid}")
-                    
+                            log.warning(
+                                f"Triangle set '{triangleset.name}' references unknown material "
+                                f"{triangleset.pid}")
+
                     # Create material for the triangle set
                     if material_name not in [m.name for m in bpy.data.materials]:
                         material = bpy.data.materials.new(material_name)
@@ -799,7 +806,9 @@ class Import3MF(bpy.types.Operator, bpy_extras.io_utils.ImportHelper):
                         if tri_idx < len(mesh.polygons):
                             mesh.polygons[tri_idx].material_index = material_index
                         else:
-                            log.warning(f"Triangle set '{triangleset.name}' references out-of-range triangle index {tri_idx}")
+                            log.warning(
+                                f"Triangle set '{triangleset.name}' references out-of-range "
+                                f"triangle index {tri_idx}")
 
         # Create an object.
         blender_object = bpy.data.objects.new("3MF Object", mesh)

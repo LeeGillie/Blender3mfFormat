@@ -392,7 +392,7 @@ class Export3MF(bpy.types.Operator, bpy_extras.io_utils.ExportHelper):
                 mesh.loop_triangles,
                 most_common_material_list_index,
                 blender_object.material_slots)
-            
+
             # Write triangle sets (v1.3.0 feature) if the mesh has multiple materials
             if len(blender_object.material_slots) > 1:
                 self.write_trianglesets(mesh_element, mesh.loop_triangles, blender_object.material_slots)
@@ -524,24 +524,24 @@ class Export3MF(bpy.types.Operator, bpy_extras.io_utils.ExportHelper):
                 if material_name not in material_to_triangles:
                     material_to_triangles[material_name] = []
                 material_to_triangles[material_name].append(tri_idx)
-        
+
         # Only write trianglesets if we have multiple material groups
         if len(material_to_triangles) > 1:
             trianglesets_element = xml.etree.ElementTree.SubElement(
                 mesh_element,
                 f"{{{MODEL_NAMESPACE}}}trianglesets")
-            
+
             # Precompute names for performance
             triangleset_name = f"{{{MODEL_NAMESPACE}}}triangleset"
             ref_name = f"{{{MODEL_NAMESPACE}}}ref"
             name_attr = f"{{{MODEL_NAMESPACE}}}name"
-            
+
             for material_name, triangle_indices in material_to_triangles.items():
                 triangleset_element = xml.etree.ElementTree.SubElement(
                     trianglesets_element,
                     triangleset_name)
                 triangleset_element.attrib[name_attr] = material_name
-                
+
                 # Write triangle indices as space-separated list
                 ref_element = xml.etree.ElementTree.SubElement(triangleset_element, ref_name)
                 ref_element.text = " ".join(str(idx) for idx in triangle_indices)
