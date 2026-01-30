@@ -748,7 +748,7 @@ class Import3MF(bpy.types.Operator, bpy_extras.io_utils.ImportHelper):
 
                 # Assign the material to the correct triangle.
                 mesh.polygons[triangle_index].material_index = materials_to_index[triangle_material]
-            
+
             # Apply triangle sets (v1.3.0 feature) - create materials for triangle sets
             if resource_object.trianglesets:
                 for triangleset in resource_object.trianglesets:
@@ -776,7 +776,7 @@ class Import3MF(bpy.types.Operator, bpy_extras.io_utils.ImportHelper):
                         material = bpy.data.materials.new(material_name)
                         material.use_nodes = True
                         principled = bpy_extras.node_shader_utils.PrincipledBSDFWrapper(material, is_readonly=False)
-                        
+
                         if set_material and set_material.color:
                             principled.base_color = set_material.color[:3]
                             principled.alpha = set_material.color[3]
@@ -787,7 +787,7 @@ class Import3MF(bpy.types.Operator, bpy_extras.io_utils.ImportHelper):
                             principled.base_color = (random.random(), random.random(), random.random())
                     else:
                         material = bpy.data.materials[material_name]
-                    
+
                     # Add material to mesh if not already there
                     material_found = False
                     material_index = -1
@@ -796,11 +796,11 @@ class Import3MF(bpy.types.Operator, bpy_extras.io_utils.ImportHelper):
                             material_found = True
                             material_index = i
                             break
-                    
+
                     if not material_found:
                         mesh.materials.append(material)
                         material_index = len(mesh.materials) - 1
-                    
+
                     # Assign this material to all triangles in the set
                     for tri_idx in triangleset.triangle_indices:
                         if tri_idx < len(mesh.polygons):

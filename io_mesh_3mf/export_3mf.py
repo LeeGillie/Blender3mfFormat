@@ -508,7 +508,7 @@ class Export3MF(bpy.types.Operator, bpy_extras.io_utils.ExportHelper):
     def write_trianglesets(self, mesh_element, triangles, material_slots):
         """
         Writes triangle sets into the specified mesh element (v1.3.0 feature).
-        
+
         Triangle sets group triangles by material assignment, allowing better organization
         and property assignment to groups of triangles.
         :param mesh_element: The <mesh> element of the 3MF document.
