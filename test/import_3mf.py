@@ -56,7 +56,7 @@ class TestImport3MF(unittest.TestCase):
         Creates fixtures to help running these tests.
         """
         self.importer = io_mesh_3mf.import_3mf.Import3MF()  # An importer class.
-        
+
         # Initialize instance variables that would normally be set in execute()
         self.importer.resource_objects = {}
         self.importer.resource_materials = {}
