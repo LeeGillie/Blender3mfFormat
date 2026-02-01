@@ -1,0 +1,95 @@
+# GitHub Release Commands - v2.2.1
+
+## Step 1: Commit Changes
+
+```powershell
+git commit -m "Release v2.2.1: GPL-3.0 upgrade and Triangle Sets compliance fixes
+
+- Upgraded license from GPL-2.0 to GPL-3.0-or-later (Blender requirement)
+- Fixed Triangle Sets namespace (now uses extension namespace)
+- Added required identifier attribute to triangle sets
+- Fixed non-geometric nature (removed material generation)
+- Added namespace declaration to model element
+- Removed random color generation
+- Updated all documentation
+- Removed internal files from repository
+"
+```
+
+## Step 2: Push to GitHub
+
+```powershell
+git push origin main
+```
+
+## Step 3: Create Tag
+
+```powershell
+git tag -a v2.2.1 -m "v2.2.1 - 3MF Specification Compliance & GPL-3.0 Upgrade"
+git push origin v2.2.1
+```
+
+## Step 4: Create GitHub Release
+
+Go to: https://github.com/LeeGillie/Blender3mfFormat/releases/new
+
+**Tag:** v2.2.1
+**Title:** v2.2.1 - 3MF Specification Compliance & GPL-3.0 Upgrade
+
+**Description:** (See GITHUB-RELEASE-GUIDE.md for full template)
+
+```markdown
+## 🎉 Version 2.2.1 - Specification Compliance Update
+
+### ⚖️ License Upgrade
+**IMPORTANT:** Upgraded from GPL-2.0-or-later to **GPL-3.0-or-later**
+- Required for Blender Extensions platform
+- Permitted under original license's "or later" clause
+- Enhanced patent protections and user freedoms
+
+### 🔧 Critical Compliance Fixes
+All 6 Blender Extensions review issues resolved:
+
+1. ✅ Triangle Sets use correct extension namespace
+2. ✅ Required identifier attribute added
+3. ✅ Non-geometric nature correctly implemented
+4. ✅ Namespace declaration added to model element
+5. ✅ Removed random color generation
+6. ✅ Documentation updated for accuracy
+
+### 📦 Installation
+Via Blender Extensions or manual download of `io_mesh_3mf-2.2.1.zip`
+
+### 🔗 Links
+- **Blender Extensions:** https://extensions.blender.org/add-ons/io-mesh-3mf/
+- **Full Changelog:** [CHANGELOG.md](CHANGELOG.md)
+- **License:** [LICENSE](LICENSE)
+```
+
+**Upload:** `io_mesh_3mf-2.2.1.zip`
+
+## Files Cleaned Up
+
+**Removed from repository (now in .gitignore):**
+- GITHUB-SETUP-GUIDE.md (internal)
+- PUBLISH-CHECKLIST.md (internal)
+- RELEASE-CHECKLIST.md (internal)
+- BLENDER-EXTENSIONS-COMPLIANCE.md (internal)
+- COMPLIANCE-VERIFICATION-RESULTS.md (internal)
+- BLENDER-SUBMISSION-GUIDE.md (internal)
+- GITHUB-RELEASE-GUIDE.md (internal)
+- RELEASE-v2.2.1-SUMMARY.md (internal)
+- RELEASE-2.2.1.md (info now in CHANGELOG)
+- build.ps1 (build script)
+- build.py (build script)
+- test_trianglesets.py (root level test)
+- All *.png files (screenshots)
+
+**What's Published on GitHub:**
+- ✅ All source code
+- ✅ LICENSE (GPL-3.0)
+- ✅ User documentation
+- ✅ CHANGELOG
+- ✅ Contributing guide
+- ✅ Test scripts (in test/ directory)
+- ✅ 3D printing guide
