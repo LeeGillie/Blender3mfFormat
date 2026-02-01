@@ -10,7 +10,9 @@ from io import BytesIO
 
 # 3D Model XML with Triangle Sets extension
 MODEL_XML = '''<?xml version="1.0" encoding="UTF-8"?>
-<model unit="millimeter" xml:lang="en-US" xmlns="http://schemas.microsoft.com/3dmanufacturing/core/2015/02" xmlns:t="http://schemas.microsoft.com/3dmanufacturing/trianglesets/2021/07">
+<model unit="millimeter" xml:lang="en-US"
+       xmlns="http://schemas.microsoft.com/3dmanufacturing/core/2015/02"
+       xmlns:t="http://schemas.microsoft.com/3dmanufacturing/trianglesets/2021/07">
   <resources>
     <basematerials id="1">
       <base name="Red" displaycolor="#FF0000"/>
@@ -79,25 +81,29 @@ CONTENT_TYPES_XML = '''<?xml version="1.0" encoding="UTF-8"?>
 # Relationships XML
 RELS_XML = '''<?xml version="1.0" encoding="UTF-8"?>
 <Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">
-  <Relationship Target="/3D/3dmodel.model" Id="rel0" Type="http://schemas.microsoft.com/3dmanufacturing/2013/01/3dmodel"/>
+  <Relationship Target="/3D/3dmodel.model" Id="rel0"
+                Type="http://schemas.microsoft.com/3dmanufacturing/2013/01/3dmodel"/>
 </Relationships>'''
+
 
 def create_3mf_file(output_path):
     """Create a valid 3MF file with Triangle Sets."""
-    
+
     # Create ZIP file
     with zipfile.ZipFile(output_path, 'w', zipfile.ZIP_DEFLATED) as zf:
         # Add required files
         zf.writestr('[Content_Types].xml', CONTENT_TYPES_XML)
         zf.writestr('_rels/.rels', RELS_XML)
         zf.writestr('3D/3dmodel.model', MODEL_XML)
-    
+
     print(f"✓ Created: {output_path}")
     print(f"  - Size: {os.path.getsize(output_path)} bytes")
     print(f"  - Contains 3 Triangle Sets with identifiers ts_0, ts_1, ts_2")
-    print(f"  - Uses correct Triangle Sets namespace: xmlns:t=\"http://schemas.microsoft.com/3dmanufacturing/trianglesets/2021/07\"")
+    print(f"  - Uses correct Triangle Sets namespace: "
+          f"xmlns:t=\"http://schemas.microsoft.com/3dmanufacturing/trianglesets/2021/07\"")
     print(f"  - Each triangle set has required 'name' and 'identifier' attributes")
     print(f"  - Triangle references use <t:ref index=\"N\"/> format")
+
 
 if __name__ == "__main__":
     output_dir = os.path.dirname(os.path.abspath(__file__))

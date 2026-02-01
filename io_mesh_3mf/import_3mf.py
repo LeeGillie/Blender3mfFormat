@@ -577,7 +577,7 @@ class Import3MF(bpy.types.Operator, bpy_extras.io_utils.ImportHelper):
         for triangleset in object_node.iterfind("./3mf:mesh/t:trianglesets/t:triangleset", MODEL_NAMESPACES):
             name = triangleset.attrib.get("name", "")
             identifier = triangleset.attrib.get("identifier", "")
-            
+
             # Both name and identifier are required by the spec
             if not name or not identifier:
                 log.warning(f"Triangle set missing required name or identifier attribute, skipping")
@@ -585,7 +585,7 @@ class Import3MF(bpy.types.Operator, bpy_extras.io_utils.ImportHelper):
 
             # Parse the triangle indices from <ref> and <refrange> elements
             triangle_indices = []
-            
+
             # Handle <ref> elements (single triangle references)
             for ref in triangleset.iterfind("./t:ref", MODEL_NAMESPACES):
                 try:
@@ -596,7 +596,7 @@ class Import3MF(bpy.types.Operator, bpy_extras.io_utils.ImportHelper):
                         log.warning(f"Triangle set '{name}' contains negative triangle index: {index}")
                 except (ValueError, KeyError):
                     log.warning(f"Triangle set '{name}' contains invalid ref element")
-            
+
             # Handle <refrange> elements (triangle ranges)
             for refrange in triangleset.iterfind("./t:refrange", MODEL_NAMESPACES):
                 try:
