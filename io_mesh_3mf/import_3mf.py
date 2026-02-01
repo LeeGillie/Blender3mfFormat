@@ -41,7 +41,7 @@ ResourceObject = collections.namedtuple("ResourceObject", [
     "trianglesets"])
 Component = collections.namedtuple("Component", ["resource_object", "transformation"])
 ResourceMaterial = collections.namedtuple("ResourceMaterial", ["name", "color"])
-TriangleSet = collections.namedtuple("TriangleSet", ["name", "triangle_indices", "pid"])
+TriangleSet = collections.namedtuple("TriangleSet", ["name", "identifier", "triangle_indices"])
 
 
 class Import3MF(bpy.types.Operator, bpy_extras.io_utils.ImportHelper):
@@ -567,38 +567,51 @@ class Import3MF(bpy.types.Operator, bpy_extras.io_utils.ImportHelper):
         """
         Reads out the triangle sets from an XML node of an object (v1.3.0 feature).
 
-        Triangle sets allow grouping triangles into named sets for different purposes
-        like multi-material assignments or selectable face groups.
+        Triangle sets are non-geometric groupings for organizational purposes.
+        They do not affect geometry or material assignments and may be used by
+        editing applications for display, selection, or workflow purposes.
         :param object_node: An <object> element from the 3dmodel.model file.
         :return: List of TriangleSet namedtuples containing triangle set information.
         """
         result = []
-        for triangleset in object_node.iterfind("./3mf:mesh/3mf:trianglesets/3mf:triangleset", MODEL_NAMESPACES):
+        for triangleset in object_node.iterfind("./3mf:mesh/t:trianglesets/t:triangleset", MODEL_NAMESPACES):
             name = triangleset.attrib.get("name", "")
-            pid = triangleset.attrib.get("pid")  # Property/material ID for this set
+            identifier = triangleset.attrib.get("identifier", "")
+            
+            # Both name and identifier are required by the spec
+            if not name or not identifier:
+                log.warning(f"Triangle set missing required name or identifier attribute, skipping")
+                continue
 
-            # Parse the triangle indices from <ref> element
+            # Parse the triangle indices from <ref> and <refrange> elements
             triangle_indices = []
-            for ref in triangleset.iterfind("./3mf:ref", MODEL_NAMESPACES):
-                ref_text = ref.text
-                if ref_text:
-                    # Triangle indices can be space-separated or comma-separated
-                    indices_str = ref_text.replace(',', ' ').split()
-                    for index_str in indices_str:
-                        try:
-                            index = int(index_str.strip())
-                            if index >= 0:
-                                triangle_indices.append(index)
-                            else:
-                                log.warning(
-                                    f"Triangle set '{name}' contains negative triangle index: {index}")
-                        except ValueError:
-                            log.warning(
-                                f"Triangle set '{name}' contains invalid triangle index: {index_str}")
+            
+            # Handle <ref> elements (single triangle references)
+            for ref in triangleset.iterfind("./t:ref", MODEL_NAMESPACES):
+                try:
+                    index = int(ref.attrib.get("index", "-1"))
+                    if index >= 0:
+                        triangle_indices.append(index)
+                    else:
+                        log.warning(f"Triangle set '{name}' contains negative triangle index: {index}")
+                except (ValueError, KeyError):
+                    log.warning(f"Triangle set '{name}' contains invalid ref element")
+            
+            # Handle <refrange> elements (triangle ranges)
+            for refrange in triangleset.iterfind("./t:refrange", MODEL_NAMESPACES):
+                try:
+                    start_index = int(refrange.attrib.get("startindex", "-1"))
+                    end_index = int(refrange.attrib.get("endindex", "-1"))
+                    if start_index >= 0 and end_index >= start_index:
+                        triangle_indices.extend(range(start_index, end_index + 1))
+                    else:
+                        log.warning(f"Triangle set '{name}' contains invalid refrange: {start_index}-{end_index}")
+                except (ValueError, KeyError):
+                    log.warning(f"Triangle set '{name}' contains invalid refrange element")
 
             if triangle_indices:
-                result.append(TriangleSet(name=name, triangle_indices=triangle_indices, pid=pid))
-                log.info(f"Loaded triangle set '{name}' with {len(triangle_indices)} triangles")
+                result.append(TriangleSet(name=name, identifier=identifier, triangle_indices=triangle_indices))
+                log.info(f"Loaded triangle set '{name}' (id: {identifier}) with {len(triangle_indices)} triangles")
 
         return result
 
@@ -749,66 +762,11 @@ class Import3MF(bpy.types.Operator, bpy_extras.io_utils.ImportHelper):
                 # Assign the material to the correct triangle.
                 mesh.polygons[triangle_index].material_index = materials_to_index[triangle_material]
 
-            # Apply triangle sets (v1.3.0 feature) - create materials for triangle sets
-            if resource_object.trianglesets:
-                for triangleset in resource_object.trianglesets:
-                    # Create a unique material for this triangle set
-                    if triangleset.name:
-                        material_name = f"TriangleSet_{triangleset.name}"
-                    else:
-                        material_name = f"TriangleSet_{len(materials_to_index)}"
-
-                    # Check if this triangle set has a material ID
-                    set_material = None
-                    if triangleset.pid:
-                        try:
-                            # Use the material from the resource materials if pid is specified
-                            if triangleset.pid in self.resource_materials:
-                                # For now, use the first material from the set
-                                set_material = self.resource_materials[triangleset.pid].get(0)
-                        except (KeyError, AttributeError):
-                            log.warning(
-                                f"Triangle set '{triangleset.name}' references unknown material "
-                                f"{triangleset.pid}")
-
-                    # Create material for the triangle set
-                    if material_name not in [m.name for m in bpy.data.materials]:
-                        material = bpy.data.materials.new(material_name)
-                        material.use_nodes = True
-                        principled = bpy_extras.node_shader_utils.PrincipledBSDFWrapper(material, is_readonly=False)
-
-                        if set_material and set_material.color:
-                            principled.base_color = set_material.color[:3]
-                            principled.alpha = set_material.color[3]
-                        else:
-                            # Generate a distinct color for the triangle set
-                            import random
-                            random.seed(hash(triangleset.name))
-                            principled.base_color = (random.random(), random.random(), random.random())
-                    else:
-                        material = bpy.data.materials[material_name]
-
-                    # Add material to mesh if not already there
-                    material_found = False
-                    material_index = -1
-                    for i, mat in enumerate(mesh.materials):
-                        if mat == material:
-                            material_found = True
-                            material_index = i
-                            break
-
-                    if not material_found:
-                        mesh.materials.append(material)
-                        material_index = len(mesh.materials) - 1
-
-                    # Assign this material to all triangles in the set
-                    for tri_idx in triangleset.triangle_indices:
-                        if tri_idx < len(mesh.polygons):
-                            mesh.polygons[tri_idx].material_index = material_index
-                        else:
-                            log.warning(
-                                f"Triangle set '{triangleset.name}' references out-of-range "
-                                f"triangle index {tri_idx}")
+            # Note: Triangle sets are non-geometric groupings per 3MF spec §4.1.5.1
+            # They do not affect geometry or material assignments.
+            # Consumers may use them for internal purposes (display, selection, etc.)
+            # but they should not generate materials or affect rendering.
+            # We preserve the triangle set information but do not apply it to the mesh.
 
         # Create an object.
         blender_object = bpy.data.objects.new("3MF Object", mesh)

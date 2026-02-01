@@ -22,6 +22,19 @@ test_output/
 # Private/Internal files (don't publish)
 GHOSTKEEPER-CONTACT.md
 REPOSITORY-STRATEGY.md
+GITHUB-SETUP-GUIDE.md
+PUBLISH-CHECKLIST.md
+RELEASE-CHECKLIST.md
+BLENDER-EXTENSIONS-COMPLIANCE.md
+COMPLIANCE-VERIFICATION-RESULTS.md
+BLENDER-SUBMISSION-GUIDE.md
+GITHUB-RELEASE-GUIDE.md
+RELEASE-v2.2.1-SUMMARY.md
+RELEASE-2.2.1.md
+build.ps1
+build.py
+test_trianglesets.py
+*.png
 
 # Conformance tests (3MF Consortium copyright)
 test/Conformance tests/

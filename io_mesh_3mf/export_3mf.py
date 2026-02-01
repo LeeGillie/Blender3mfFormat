@@ -97,6 +97,8 @@ class Export3MF(bpy.types.Operator, bpy_extras.io_utils.ExportHelper):
         # Bug: https://bugs.python.org/issue17088
         # Workaround: https://stackoverflow.com/questions/4997848/4999510#4999510
         root = xml.etree.ElementTree.Element(f"{{{MODEL_NAMESPACE}}}model")
+        # Declare Triangle Sets extension namespace per spec §2.3.1 and §4.1.5
+        root.attrib[f"xmlns:t"] = TRIANGLESETS_NAMESPACE
 
         scene_metadata = Metadata()
         scene_metadata.retrieve(bpy.context.scene)
@@ -509,13 +511,14 @@ class Export3MF(bpy.types.Operator, bpy_extras.io_utils.ExportHelper):
         """
         Writes triangle sets into the specified mesh element (v1.3.0 feature).
 
-        Triangle sets group triangles by material assignment, allowing better organization
-        and property assignment to groups of triangles.
+        Triangle sets are non-geometric groupings for organizational purposes per 3MF spec §4.1.5.1.
+        They do not affect geometry or material assignments. We export them grouped by material
+        for organizational purposes, but consumers may ignore this information.
         :param mesh_element: The <mesh> element of the 3MF document.
         :param triangles: A list of triangles (MeshLoopTriangles).
         :param material_slots: List of materials belonging to the object.
         """
-        # Group triangles by material
+        # Group triangles by material for organizational purposes
         material_to_triangles = {}
         for tri_idx, triangle in enumerate(triangles):
             mat_idx = triangle.material_index
@@ -527,24 +530,29 @@ class Export3MF(bpy.types.Operator, bpy_extras.io_utils.ExportHelper):
 
         # Only write trianglesets if we have multiple material groups
         if len(material_to_triangles) > 1:
+            # Triangle Sets MUST use the Triangle Sets extension namespace per spec §4.1.5 and Appendix C.3
             trianglesets_element = xml.etree.ElementTree.SubElement(
                 mesh_element,
-                f"{{{MODEL_NAMESPACE}}}trianglesets")
+                f"{{{TRIANGLESETS_NAMESPACE}}}trianglesets")
 
             # Precompute names for performance
-            triangleset_name = f"{{{MODEL_NAMESPACE}}}triangleset"
-            ref_name = f"{{{MODEL_NAMESPACE}}}ref"
-            name_attr = f"{{{MODEL_NAMESPACE}}}name"
+            triangleset_name = f"{{{TRIANGLESETS_NAMESPACE}}}triangleset"
+            ref_name = f"{{{TRIANGLESETS_NAMESPACE}}}ref"
 
+            set_index = 0
             for material_name, triangle_indices in material_to_triangles.items():
                 triangleset_element = xml.etree.ElementTree.SubElement(
                     trianglesets_element,
                     triangleset_name)
-                triangleset_element.attrib[name_attr] = material_name
+                # Both name and identifier are REQUIRED per spec §4.1.5.1 and XSD schema
+                triangleset_element.attrib["name"] = material_name
+                triangleset_element.attrib["identifier"] = f"ts_{set_index}"
+                set_index += 1
 
-                # Write triangle indices as space-separated list
-                ref_element = xml.etree.ElementTree.SubElement(triangleset_element, ref_name)
-                ref_element.text = " ".join(str(idx) for idx in triangle_indices)
+                # Write each triangle index as a separate <ref> element per spec §4.1.5.2
+                for tri_idx in triangle_indices:
+                    ref_element = xml.etree.ElementTree.SubElement(triangleset_element, ref_name)
+                    ref_element.attrib["index"] = str(tri_idx)
 
     def format_number(self, number, decimals):
         """

@@ -16,7 +16,8 @@ This module defines some constants for 3MF's file structure.
 These are the constants that are inherent to the 3MF file format.
 """
 
-SUPPORTED_EXTENSIONS = set()  # Set of namespaces for 3MF extensions that we support.
+# Set of namespaces for 3MF extensions that we support.
+SUPPORTED_EXTENSIONS = {"http://schemas.microsoft.com/3dmanufacturing/trianglesets/2021/07"}
 # File contents to use when files must be preserved but there's a file with different content in a previous archive.
 # Only for flagging. This will not be in the final 3MF archives.
 conflicting_mustpreserve_contents = "<Conflicting MustPreserve file!>"
@@ -36,8 +37,10 @@ MODEL_MIMETYPE = "application/vnd.ms-package.3dmanufacturing-3dmodel+xml"  # MIM
 
 # Constants in the 3D model file.
 MODEL_NAMESPACE = "http://schemas.microsoft.com/3dmanufacturing/core/2015/02"
+TRIANGLESETS_NAMESPACE = "http://schemas.microsoft.com/3dmanufacturing/trianglesets/2021/07"
 MODEL_NAMESPACES = {
-    "3mf": MODEL_NAMESPACE
+    "3mf": MODEL_NAMESPACE,
+    "t": TRIANGLESETS_NAMESPACE
 }
 MODEL_DEFAULT_UNIT = "millimeter"  # If the unit is missing, it will be this.
 MODEL_SPEC_VERSION = "1.4.0"  # Specification version we support

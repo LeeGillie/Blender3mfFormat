@@ -122,7 +122,7 @@ When making changes, update:
 
 ## License
 
-All contributions are licensed under **GPL-2.0-or-later**, the same as the original project.
+All contributions are licensed under **GPL-3.0-or-later**, upgraded from the original project's GPL-2.0.
 
 By contributing, you agree to license your code under these terms.
 

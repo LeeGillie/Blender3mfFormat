@@ -2,29 +2,31 @@
 
 ## Overview
 
-This document verifies that the Blender 5 fork of the 3MF Format extension complies with the GNU General Public License v2.0 (GPL-2.0-or-later) requirements of the original work.
+This document verifies that the Blender 5 fork of the 3MF Format extension complies with the GNU General Public License v3.0 (GPL-3.0-or-later) requirements. The original work was GPL-2.0-or-later, and this fork has been upgraded to GPL-3.0-or-later to meet Blender Extensions submission requirements.
 
 ## Original Work
 
 - **Project:** Blender 3MF Format
 - **Author:** Ghostkeeper
 - **Repository:** https://github.com/Ghostkeeper/Blender3mfFormat
-- **License:** GNU General Public License v2.0 or later (GPL-2.0-or-later)
+- **Original License:** GNU General Public License v2.0 or later (GPL-2.0-or-later)
 - **Copyright:** 2020-2024 Ghostkeeper
 
 ## This Fork
 
-- **Version:** 2.0.0 (Blender 5 compatible)
-- **License:** GNU General Public License v2.0 or later (GPL-2.0-or-later)
+- **Version:** 2.2.1 (Blender 5 compatible)
+- **License:** GNU General Public License v3.0 or later (GPL-3.0-or-later)
 - **Copyright:** 
   - 2020-2024 Ghostkeeper (original work)
   - 2026 Lee Gillie, CCP (Blender 5 fork modifications)
 
-## GPL-2.0 Compliance Checklist
+**Note:** Upgraded from GPL-2.0-or-later to GPL-3.0-or-later as required by Blender Extensions platform. This is permitted under the "or later" clause of the original GPL-2.0 license.
+
+## GPL-3.0 Compliance Checklist
 
 ### ✅ Section 1: Copyright Notices
 - [x] Original copyright notice preserved in all source files
-- [x] License text included in repository ([LICENSE.md](LICENSE.md))
+- [x] License text included in repository ([LICENSE](LICENSE) - GPL-3.0)
 - [x] Copyright information in manifest ([blender_manifest.toml](blender_manifest.toml))
 
 ### ✅ Section 2(a): Modification Notices
@@ -33,7 +35,7 @@ This document verifies that the Blender 5 fork of the 3MF Format extension compl
 - [x] Nature of changes clearly described in documentation
 
 ### ✅ Section 2(b): License Distribution
-- [x] This work is licensed under GPL-2.0-or-later (same as original)
+- [x] This work is licensed under GPL-3.0-or-later (upgraded from GPL-2.0-or-later)
 - [x] Available at no charge to all third parties
 - [x] License terms clearly stated
 
@@ -78,7 +80,7 @@ This fork maintains **100% of the original functionality** while adding:
 
 ### What This Fork DOES Do
 - ✅ Preserve all original functionality
-- ✅ Maintain GPL-2.0-or-later license
+- ✅ Upgrade to GPL-3.0-or-later (permitted under original GPL-2.0 "or later" clause)
 - ✅ Clearly identify as a derivative work
 - ✅ Provide proper attribution
 - ✅ Document all changes
@@ -88,11 +90,11 @@ This fork maintains **100% of the original functionality** while adding:
 As specified in the manifest:
 ```toml
 license = [
-  "SPDX:GPL-2.0-or-later",
+  "SPDX:GPL-3.0-or-later",
 ]
 ```
 
-This is the same license as the original work, ensuring compatibility.
+This is an upgrade from the original GPL-2.0-or-later, permitted under the "or later" clause.
 
 ## Copyright Statements
 
@@ -115,29 +117,29 @@ copyright = [
 
 ## Distribution Permissions
 
-Under GPL-2.0-or-later, anyone may:
+Under GPL-3.0-or-later, anyone may:
 - ✅ Use this software for any purpose
 - ✅ Study and modify the source code
 - ✅ Distribute copies of the software
 - ✅ Distribute modified versions
 
 **Conditions:**
-- Must distribute under the same GPL-2.0-or-later license
+- Must distribute under GPL-3.0-or-later license
 - Must provide source code
 - Must preserve copyright notices
 - Must document changes
 
 ## Conclusion
 
-This Blender 5 fork **fully complies** with the GPL-2.0-or-later license requirements of Ghostkeeper's original work. All modifications are:
+This Blender 5 fork **fully complies** with the GPL-3.0-or-later license requirements. The upgrade from GPL-2.0-or-later is permitted under the original license's "or later" clause. All modifications are:
 
 1. Properly attributed
 2. Clearly documented
-3. Distributed under the same license
+3. Distributed under GPL-3.0-or-later license
 4. Available in source form
 5. Respectful of the original author's rights
 
 ---
 
-**Last Updated:** January 30, 2026  
+**Last Updated:** February 1, 2026  
 **Verified By:** Fork Maintainers

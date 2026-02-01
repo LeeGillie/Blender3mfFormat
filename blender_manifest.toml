@@ -4,7 +4,7 @@
 schema_version = "1.0.0"
 
 id = "io_mesh_3mf"
-version = "2.2.0"
+version = "2.2.1"
 name = "3MF Format"
 tagline = "Import and export 3D Manufacturing Format files"
 maintainer = "Lee Gillie, CCP"
@@ -18,7 +18,7 @@ blender_version_min = "4.2.0"
 
 # License - using SPDX identifier
 license = [
-  "SPDX:GPL-2.0-or-later",
+  "SPDX:GPL-3.0-or-later",
 ]
 
 # Copyright information
@@ -42,9 +42,24 @@ paths_exclude_pattern = [
   "*.zip",
   "*.blend",
   "*.blend1",
+  "*.png",
   "test/",
   ".github/",
+  ".venv/",
+  ".vscode/",
+  "BLENDER-EXTENSIONS-COMPLIANCE.md",
   "CHANGES.md",
+  "COMPLIANCE-VERIFICATION-RESULTS.md",
   "CONTRIBUTING.md",
+  "GHOSTKEEPER-CONTACT.md",
+  "GITHUB-SETUP-GUIDE.md",
+  "PUBLISH-CHECKLIST.md",
+  "RELEASE-2.2.1.md",
+  "RELEASE-CHECKLIST.md",
+  "REPOSITORY-STRATEGY.md",
+  "TESTING.md",
+  "build.ps1",
+  "build.py",
   "screenshot.png",
+  "test_trianglesets.py",
 ]

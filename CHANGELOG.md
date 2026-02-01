@@ -5,6 +5,71 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.2.1] - 2026-02-01
+
+### Changed - License Upgrade
+- **IMPORTANT:** Upgraded license from GPL-2.0-or-later to GPL-3.0-or-later
+  - Required for Blender Extensions platform submission
+  - Permitted under original license's "or later" clause
+  - All patent protections and user freedoms now covered by GPL-3.0
+  - See [LICENSE](LICENSE) for full text
+
+### Fixed - 3MF Triangle Sets Specification Compliance
+**CRITICAL FIXES:** Corrected Triangle Sets implementation to fully comply with 3MF Core Specification v1.4.0
+
+#### Triangle Sets Namespace (§4.1.5, Appendix C.3)
+- **Fixed:** Triangle Sets now use the correct extension namespace: `http://schemas.microsoft.com/3dmanufacturing/trianglesets/2021/07`
+- **Fixed:** Triangle Sets are properly prefixed with `t:` namespace in exported files
+- **Fixed:** Model element declares `xmlns:t` namespace when triangle sets are present
+- **Previous Issue:** Triangle Sets incorrectly used core namespace, producing invalid 3MF files
+
+#### Required Identifier Attribute (§4.1.5.1, Appendix B.1.2)
+- **Fixed:** Triangle Sets now include required `identifier` attribute per XSD schema
+- **Fixed:** Identifiers are unique within each mesh (format: `ts_0`, `ts_1`, etc.)
+- **Fixed:** Both `name` and `identifier` attributes are validated on import
+- **Previous Issue:** Missing identifier attribute made files non-compliant with XSD schema
+
+#### Non-Geometric Grouping Clarification (§4.1.5.1)
+- **Fixed:** Triangle Sets are now correctly treated as **non-geometric organizational groupings**
+- **Fixed:** Triangle Sets no longer generate materials or affect rendering on import
+- **Fixed:** Removed random color generation for triangle sets
+- **Previous Issue:** Triangle Sets were incorrectly treated as defining material assignments
+
+#### Specification-Compliant Export
+- **Fixed:** Individual `<ref>` elements with `index` attribute per spec §4.1.5.2
+- **Fixed:** Support for `<refrange>` elements on import per spec §4.1.5.3
+- **Fixed:** Proper namespace prefixing for all triangle set elements
+- **Previous Issue:** Used text content instead of index attribute; wrong namespace
+
+### Added
+- **New Documentation:** [3MF-FOR-3D-PRINTING.md](3MF-FOR-3D-PRINTING.md) - Comprehensive guide on using 3MF for multi-material 3D printing
+  - Explains 3MF use cases for Bambu Lab, Prusa MMU, and other multi-material printers
+  - Clarifies how Blender materials map to filament assignments
+  - Workflow guide for creating multi-material prints
+  - Common questions and troubleshooting
+
+### Changed
+- Updated constants to include `TRIANGLESETS_NAMESPACE` 
+- Updated `TriangleSet` namedtuple: changed `pid` to `identifier` (spec compliance)
+- Enhanced Triangle Sets documentation to clarify they are organizational, not geometric
+- Updated all Triangle Sets comments and docstrings for accuracy
+
+### Documentation Updates
+- README.md: Added 3D printing guide link and Triangle Sets clarifications
+- V1.3.0-IMPLEMENTATION.md: Corrected Triangle Sets description and implementation details
+- All documentation now reflects Triangle Sets as non-geometric groupings per spec
+
+### Technical Notes
+- Triangle Sets are now fully compliant with 3MF Core Specification v1.4.0
+- Files exported by v2.2.1 will validate against the official XSD schema
+- For multi-material printing: **Use standard 3MF base materials, not triangle sets**
+- Triangle Sets are organizational tools for CAD/CAM workflows, not material assignment
+
+### Migration from v2.2.0
+- **No action required for most users**
+- If you relied on triangle set random colors: Update workflow to use explicit materials
+- Exported files from v2.2.1 are now spec-compliant and will work with all conforming consumers
+
 ## [2.2.0] - 2026-01-30
 
 ### Added - 3MF v1.4.0 Specification Support
@@ -55,7 +120,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added VS Code development environment with tasks, settings, and launch configurations
 - Created build scripts: `build.py` (Python) and `build.ps1` (PowerShell)
 - Added development documentation: `DEVELOPMENT.md`, `QUICKSTART.md`, `CREDITS.md`
-- Added proper GPL-2.0-or-later license attribution
+- Added proper GPL-3.0-or-later license attribution
 - Restructured root `__init__.py` to properly import from `io_mesh_3mf` package
 - Updated `.gitignore` for modern development workflow
 

@@ -107,7 +107,7 @@ This export function has five relevant parameters:
 
 This extension is a Blender 5 fork of Ghostkeeper's original work. See [CREDITS.md](CREDITS.md) for detailed attribution.
 
-**License:** GNU General Public License v2.0 or later (GPL-2.0-or-later)
+**License:** GNU General Public License v3.0 or later (GPL-3.0-or-later)
 
 The original add-on was created by Ghostkeeper and is available at:
 https://github.com/Ghostkeeper/Blender3mfFormat
@@ -123,14 +123,24 @@ https://github.com/Ghostkeeper/Blender3mfFormat
 
 ### Supported Features (all versions):
 - **Mesh Geometry:** Full import/export with automatic triangulation
-- **Triangle Sets (v1.3.0):** Group triangles by material for better organization
-- **Materials & Colors:** Base materials with RGB/RGBA color support
+- **Triangle Sets (v1.3.0):** Non-geometric organizational groupings (per spec §4.1.5.1)
+- **Materials & Colors:** Base materials with RGB/RGBA color support for multi-material printing
 - **Components & Assemblies:** Hierarchical object structures with transformations
 - **Metadata:** Scene-level and object-level metadata preservation
 - **Unit Conversions:** Automatic conversion between mm, cm, inch, meter, etc.
 - **Transformations:** Full 4x4 matrix support with scaling, rotation, translation
 - **Build Items:** Multiple objects with independent transformations
 - **Error Recovery:** Graceful handling of malformed files (continues loading valid data)
+
+### 3MF for 3D Printing - Multi-Material Workflow
+
+For detailed information on using 3MF for multi-material 3D printing (Bambu Lab, Prusa MMU, etc.), see [3MF-FOR-3D-PRINTING.md](3MF-FOR-3D-PRINTING.md).
+
+**Quick Summary:**
+- 3MF is the native slicer format for Bambu Lab printers and widely supported by other multi-material systems
+- Blender materials map directly to filament assignments in your slicer
+- Material names and colors are preserved through the export process
+- Triangle Sets are organizational only - use regular Blender materials for multi-material printing
 
 ### v1.4.0 Clarifications Implemented:
 - Enhanced assembly/component relationship handling
@@ -140,13 +150,17 @@ https://github.com/Ghostkeeper/Blender3mfFormat
 
 ### Specification Compliance
 
-This add-on currently supports the full 3MF Core Specification v1.4.0. However there are a number of places where it deviates from the specification on purpose.
+This add-on implements the full 3MF Core Specification v1.4.0. However, there are a number of places where it deviates from the specification on purpose.
 
 The 3MF specification demands that consumers of 3MF files (i.e. importing 3MF files) must fail quickly and catastrophically when anything is wrong. If a single field is wrong, the entire archive should not get loaded. This add-on has the opposite approach: If something small is wrong with the file, the rest of the file can still be loaded, but for instance without loading that particular triangle that's wrong. You'll get an incomplete file and a warning is placed in the Blender log.
 
 The 3MF specification is also not designed to handle loading multiple 3MF files at once, or to load 3MF files into existing scenes together with other 3MF files. This add-on will try to load as much as possible, but if there are conflicts with parts of the files, it will load neither. One example is the scene metadata such as the title of the scene. If loading two files with the same title, that title is kept. However when combining files with multiple titles, no title will be loaded.
 
-No 3MF format extensions are currently supported. That is a goal for future development.
+**Supported 3MF Extensions:**
+- Triangle Sets Extension (http://schemas.microsoft.com/3dmanufacturing/trianglesets/2021/07)
+  - Compliant with spec §4.1.5 and Appendix B.1.2
+  - Triangle Sets are properly namespaced and include required identifier attributes
+  - Triangle Sets are non-geometric groupings per spec §4.1.5.1
 
 ## Want to Fork or Contribute?
 

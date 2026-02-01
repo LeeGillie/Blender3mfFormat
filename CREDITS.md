@@ -62,7 +62,7 @@ This extension uses only Python standard library and Blender's built-in APIs. No
 If you'd like to contribute to this Blender 5 fork:
 - Report issues on the fork's repository
 - Follow the contribution guidelines in [CONTRIBUTING.md](CONTRIBUTING.md)
-- Respect the GPL-2.0-or-later license terms
+- Respect the GPL-3.0-or-later license terms
 
 For the original add-on (Blender 2.8-4.2):
 - Visit https://github.com/Ghostkeeper/Blender3mfFormat
